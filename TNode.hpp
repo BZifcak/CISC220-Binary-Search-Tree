@@ -28,7 +28,4 @@ public:
 	int findHeight(TNode *node);
 };
 
-
-
-
 #endif /* TNode_HPP_ */
