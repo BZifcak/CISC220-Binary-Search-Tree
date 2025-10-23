@@ -5,8 +5,7 @@ using std::string;
 class BST{
     friend class Interface;
     TNode *first;
-    TNode *last;
-    int length;
+    int height;
     public:
     BST(TNode *f);
     ~BST();
