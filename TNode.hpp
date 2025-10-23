@@ -10,7 +10,7 @@
 using std::string;
 
 class TNode{
-	friend class BST;  // You should change this to whatever you called your BST class
+	friend class BST;
 	friend class Interface;
 	TNode *left;
 	TNode *right;
@@ -21,7 +21,11 @@ public:
 	TNode(const string sp, const string st, const string inf);
 	TNode();
 	~TNode();
+	void del(TNode *node);
 	void printNode(const bool XtraInfo);
+	void updateStatus(string s);
+	void updateHeight();
+	int findHeight(TNode *node);
 };
 
 
