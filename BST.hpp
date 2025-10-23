@@ -1,4 +1,4 @@
-#include "TNode.h"
+#include "TNode.hpp"
 #include <stdlib.h>
 using std::string;
 
@@ -14,7 +14,7 @@ class BST{
     void preOrderPrint();
     void inOrderPrint();
     void postOrderPrint();
-    node *findNode(string n);
+    TNode *findNode(string n);
     void setStatus(string s);
     void removeTNode(string n);
 };
