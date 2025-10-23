@@ -3,39 +3,109 @@
 #include <stdlib.h>
 using std::string;
 
+BST::BST(TNode *f, bool x){
+    first = f;
+    xtra = x;
+}
 BST::BST(TNode *f){
     first = f;
-    TNode *tmp = first;
-    length = 1;
-    last = nullptr;
-    //finds last
-    while(tmp->next != nullptr){
-        tmp = tmp->next;
-        //updates length for each node 
-        length++;
-    }
-    last = tmp;
+    xtra = false;
 }
+BST::BST(bool x) {
+    first = nullptr;
+    xtra = x;
+}
+
+
 BST::~BST(){}
 
-BST::TNode *find(string n){
-    TNode *tmp = first;
-    while (tmp->animal->name != n){
-        if(tmp->next == nullptr){
-            return NULL;
-        }
-        tmp = tmp->next;
+TNode* BST::find(string n){
+    return find(n, first);
+}
+TNode* BST::find(string n, TNode *node) {
+    if (node == NULL) {
+        return NULL;
     }
-    return tmp;
+    if (node->animal->name == n) {
+        return node;
+    }
+    if (node->animal->name < n) {
+        return find(n,node->left);
+    } else {
+        return find(n,node->right);
+    }
 }
-BST::printNode(TNode *t){
-    std::cout<< "This species name is: " << t->animal->name "\nIt's status is: " << t->animal->status <<"\n and its info is: " << t->animal->info << endl;
+TNode* BST::insert(string n, string i, string s){
+    TNode *node = new TNode(n,i,s);
+    insertNode(node, first);
+    return node;
 }
-BST::void insert(TNode *newNode){
-
+void BST::insertNode(TNode *newNode, TNode *node) {
+    if (node->animal->name > newNode->animal->name && node->left == nullptr) {
+        node->left = newNode;
+        newNode->parent = node;
+        first->updateHeight();
+        return;
+    }else if  (node->animal->name > newNode->animal->name && node->left == nullptr) {
+        node->left = newNode;
+        newNode->parent = node;
+        first->updateHeight();
+        return;
+    }
+    if (node->animal->name < newNode->animal->name){insertNode(newNode,node->left);}
+    else{insertNode(newNode,node->right);}
 }
-BST::void preOrderPrint();
-BST::void inOrderPrint();
-BST::void postOrderPrint();
-BST::void setStatus(string s);
-BST::void removeTNode(string n);
+TNode* BST::remove(string n) {
+    remove(n,first);
+}
+TNode* BST::remove(string n, TNode *node) {
+    if (node == nullptr) {
+        return nullptr;
+    }
+    if (node->animal->name == n) {
+        if (node->animal->name < node->parent->animal->name) {
+            delete [] node;
+            node->parent->left = nullptr;
+            first->updateHeight();
+            return node;
+        } else {
+            delete [] node;
+            node->parent->right = nullptr;
+            first->updateHeight();
+            return node;
+        }
+    }
+    if (node->animal->name < n) {
+        return remove(n,node->left);
+    } else {
+        return remove(n,node->right);
+    }
+}
+void BST::printTreePre(){printTree(first, 0);}
+void BST::printTreeIO(){printTree(first, 1);}
+void BST::printTreePost(){printTree(first, 2);}
+void BST::printTree(TNode* node, int order) {
+    if (!node) {
+        return;
+    }
+    switch (order) {
+        case 0: {
+            node->printNode(xtra);
+            printTree(node->left, order);
+            printTree(node->right, order);
+        }
+        case 1: {
+            printTree(node->left, order);
+            node->printNode(xtra);
+            printTree(node->right, order);
+        }
+        case 2: {
+            printTree(node->left, order);
+            printTree(node->right, order);
+            node->printNode(xtra);
+        }
+    }
+}
+void BST::updateStatus(string name,string status) {
+    find(name)->updateStatus(status);
+}
