@@ -13,6 +13,7 @@ class BST{
     BST(TNode *f, bool x);
     BST(TNode *f);
     BST(bool x);
+    void deleteSubtree(TNode *node);
     ~BST();
     TNode *find(string n);
     TNode *find(string n, TNode *node);

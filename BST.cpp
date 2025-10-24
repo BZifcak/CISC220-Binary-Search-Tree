@@ -3,6 +3,8 @@
 #include <stdlib.h>
 using std::string;
 
+//constructors----------------------------------------------------------------------
+
 BST::BST(TNode *f, bool x){
     first = f;
     xtra = x;
@@ -15,16 +17,31 @@ BST::BST(bool x) {
     first = nullptr;
     xtra = x;
 }
+//----------------------------------------------------------------------
 
+//Destructor ---------------------------------------------------------------------
+//Calls helper function so it can run recursively
+void BST::deleteSubtree(TNode *node) {
+    if (!node) return;
+    deleteSubtree(node->left);
+    deleteSubtree(node->right);
+    delete node;
+}
 
-BST::~BST(){}
+BST::~BST() {
+    deleteSubtree(first);
+    first = nullptr;
+}
+//---------------------------------------------------------------------
 
+//Calls helper function so it can run recursively
 TNode* BST::find(string n){
     return find(n, first);
 }
+/*recursively traces the tree in PreOrder traversal,
+branching left || right based on if the current name is > or < target name*/
 TNode* BST::find(string n, TNode *node) {
     if (node == nullptr) {
-        std::cout<<"animal not found"<<std::endl;
         return nullptr;
     }
     if (node->animal->name == n) {
@@ -36,11 +53,16 @@ TNode* BST::find(string n, TNode *node) {
         return find(n,node->left);
     }
 }
+/*Calls helper function so it can run recursively and passes node created with arguments
+Returns new Tnode*/
 TNode* BST::insert(string n, string i, string s){
     TNode *node = new TNode(n,i,s);
     insertNode(node, first);
     return node;
 }
+/*first checks if BST is empty,
+then if it can be inserted to the left/right,
+then calls itself passing its left child then right child*/
 void BST::insertNode(TNode *newNode, TNode *node) {
     if (first == nullptr) {
         first = newNode;
@@ -65,9 +87,13 @@ void BST::insertNode(TNode *newNode, TNode *node) {
         insertNode(newNode,node->right);
     }
 }
+/*Calls helper function to run recursively*/
 TNode* BST::remove(string n) {
     return remove(n,first);
 }
+/*checks base case,
+finds if target node is right or left and removes
+otherwise calls itself passing its left child then right child*/
 TNode* BST::remove(string n, TNode *node) {
     if (node == nullptr) {
         return nullptr;
@@ -91,9 +117,13 @@ TNode* BST::remove(string n, TNode *node) {
         return remove(n,node->right);
     }
 }
+//All print functions call the same recursive helper function with their order as am argument
 void BST::printTreePre(){printTree(first, 0);}
 void BST::printTreeIO(){printTree(first, 1);}
 void BST::printTreePost(){printTree(first, 2);}
+/*helper function for all print functions
+takes in first node and order [0,1,2] mapping to [pre,in,post] respectively
+ */
 void BST::printTree(TNode* node, int order) {
     if (!node) {
         return;
@@ -119,6 +149,9 @@ void BST::printTree(TNode* node, int order) {
         }
     }
 }
+/*assumes node is in tree,
+calls TNode update status function
+ */
 void BST::updateStatus(string name,string status) {
         find(name)->updateStatus(status);
 }
