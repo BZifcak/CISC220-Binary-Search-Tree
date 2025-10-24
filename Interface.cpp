@@ -9,7 +9,6 @@ using namespace std;
 
 
 Interface::Interface(const string name, const bool Xtra) {
-
 	fn = name;
 	tree = new BST(Xtra);
 	readFile();
@@ -106,6 +105,10 @@ void Interface::Menu() {
 			}
 			name = name.substr(0,k+1);
 			TNode *tmp = tree->find(name);
+			if (tmp == nullptr) {
+				std::cout << "species not found" <<std::endl;
+				break;
+			}
 			cout << "\t"<< tmp->animal->name << endl;
 			cout << "\t"<<tmp->animal->status << endl;
 			cout <<"\t"<<tmp->animal->info << endl<< endl;
@@ -180,29 +183,17 @@ void Interface::readFile() {
 	string arr[3];
 	string j;
 	//file >> j;
-	//what yarrington originaly had was producing an infinite loop, so I removed the error and some redundancies
-	/*while (!file.eof()) {
-		std::cout << "j value: " <<j<< std::endl;
-
+	while (!file.eof()) {
 		if (j.length() > 0) {
-			std::cout << "hello from reedFile 3" << std::endl;
-
 		strip(j, arr);
-		cout << arr[0]<< ", " << arr[1] << ", " << arr[2] << endl;
+		//cout << arr[0]<< ", " << arr[1] << ", " << arr[2] << endl;
 		// for testing as I read in - you can comment this out you've gotten things working
 		tree->insert(arr[0], arr[1], arr[2]);
 		}
 		getline(file,j);
-	}*/
-	while (std::getline(file, j)) {
-		if (!j.empty()) {
-			strip(j, arr);
-			//std::cout << arr[0] << ", " << arr[1] << ", " << arr[2] << std::endl;
-			tree->insert(arr[0], arr[1], arr[2]);
-		}
 	}
 
-	tree->printTreeIO();
+	//tree->printTreeIO();
 }
 
 
