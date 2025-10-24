@@ -24,11 +24,10 @@ void TNode::del(TNode *node){
     del(node->right);
 }
 void TNode::printNode(const bool XtraInfo) {
-    if (XtraInfo) {
-        std::cout<< "This species name is: " << animal->name << "\nIt's status is: " << animal->status <<"\n and its info is: " << animal->info << std::endl;
-        return;
-    }
     std::cout<< "This species name is: " << animal->name << "\nIt's status is: " << animal->status << std::endl;
+    if (XtraInfo) {
+        std::cout<< "It's info is: " << animal->info << std::endl;
+    }
 }
 void TNode::updateStatus(string s) {
     animal->status = s;
@@ -37,6 +36,11 @@ void TNode::updateHeight() {
     findHeight(this);
 }
 int TNode::findHeight(TNode *node) {
-    height = std::max(findHeight(left), findHeight(right)) + 1;
+    if (node == nullptr) {
+        return 0;
+    }
+    height = std::max(findHeight(node->left), findHeight(node->right)) + 1;
+    return height;
+
 }
 
