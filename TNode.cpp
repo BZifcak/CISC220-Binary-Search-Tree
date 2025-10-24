@@ -12,7 +12,6 @@ TNode::TNode() {
     right = nullptr;       // no right child
     parent = nullptr;      // no parent
     animal = nullptr;      // no Species data allocated
-    int height = 1;        // initialize height for this node
 }
 
 // Destructor: attempts to free subtree rooted at this node
@@ -23,6 +22,7 @@ TNode::~TNode() {
 /*Recursive helper that deletes the subtree rooted at node
  Traverses to leaves and deletes nodes*/
 void TNode::del(TNode *node){
+    if (!node){return;} //checks for null node
     if (node->left == nullptr && node->right == nullptr) {
         delete [] node;    // delete the node (note: delete[], not delete — see implementation notes)
         return;
