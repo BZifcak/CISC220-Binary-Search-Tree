@@ -105,6 +105,7 @@ void Interface::Menu() {
 			}
 			name = name.substr(0,k+1);
 			TNode *tmp = tree->find(name);
+			//checks against find failing, otherwise the following lines dereference a nullptr
 			if (tmp == nullptr) {
 				std::cout << "species not found" <<std::endl;
 				break;
