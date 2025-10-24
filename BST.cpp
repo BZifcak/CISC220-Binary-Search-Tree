@@ -4,15 +4,17 @@
 using std::string;
 
 //constructors----------------------------------------------------------------------
-
+// Initialize root pointer and xtra flag
 BST::BST(TNode *f, bool x){
     first = f;
     xtra = x;
 }
+// Initialize root pointer and xtra to false if not provided
 BST::BST(TNode *f){
     first = f;
     xtra = false;
 }
+// Initialize root to nullptr pointer and xtra flag
 BST::BST(bool x) {
     first = nullptr;
     xtra = x;
@@ -20,7 +22,7 @@ BST::BST(bool x) {
 //----------------------------------------------------------------------
 
 //Destructor ---------------------------------------------------------------------
-//Calls helper function so it can run recursively
+// Recursively delete all nodes starting from root
 void BST::deleteSubtree(TNode *node) {
     if (!node) return;
     deleteSubtree(node->left);
@@ -34,7 +36,7 @@ BST::~BST() {
 }
 //---------------------------------------------------------------------
 
-//Calls helper function so it can run recursively
+/* Return pointer to node with matching name or nullptr if not found.*/
 TNode* BST::find(string n){
     return find(n, first);
 }
@@ -54,7 +56,7 @@ TNode* BST::find(string n, TNode *node) {
     }
 }
 /*Calls helper function so it can run recursively and passes node created with arguments
-Returns new Tnode*/
+Returns new TNode object*/
 TNode* BST::insert(string n, string i, string s){
     TNode *node = new TNode(n,i,s);
     insertNode(node, first);
@@ -64,22 +66,23 @@ TNode* BST::insert(string n, string i, string s){
 then if it can be inserted to the left/right,
 then calls itself passing its left child then right child*/
 void BST::insertNode(TNode *newNode, TNode *node) {
-    if (first == nullptr) {
+    if (first == nullptr) { //checks if BST is empty
         first = newNode;
         first->updateHeight();
         return;
     }
-    if ((node->animal->name > newNode->animal->name) && node->left == nullptr) {
+    if ((node->animal->name > newNode->animal->name) && node->left == nullptr) { //checks for left insert
         node->left = newNode;
         newNode->parent = node;
         first->updateHeight();
         return;
-    }else if  ((node->animal->name < newNode->animal->name) && node->right == nullptr) {
+    }else if  ((node->animal->name < newNode->animal->name) && node->right == nullptr) { // checks for right insert
         node->right = newNode;
         newNode->parent = node;
         first->updateHeight();
         return;
     }
+    //recursive calls
     if (node->animal->name > newNode->animal->name) {
         insertNode(newNode,node->left);
     }
@@ -91,14 +94,16 @@ void BST::insertNode(TNode *newNode, TNode *node) {
 TNode* BST::remove(string n) {
     return remove(n,first);
 }
-/*checks base case,
-finds if target node is right or left and removes
-otherwise calls itself passing its left child then right child*/
+/* remove helper
+ * Currently only handles detaching leaf nodes and assumes non-root parent.
+ * Returns detached node or nullptr if not found.
+ */
 TNode* BST::remove(string n, TNode *node) {
-    if (node == nullptr) {
+    if (node == nullptr) { //checks base case
         return nullptr;
     }
     if (node->animal->name == n) {
+        //handles deletion and redefining parents children
         if (node->animal->name < node->parent->animal->name) {
             node->parent->left = nullptr;
             node->parent = nullptr;
@@ -111,6 +116,7 @@ TNode* BST::remove(string n, TNode *node) {
             return node;
         }
     }
+    //recursive calls
     if (node->animal->name > n) {
         return remove(n,node->left);
     } else {
@@ -128,20 +134,24 @@ void BST::printTree(TNode* node, int order) {
     if (!node) {
         return;
     }
+    //discriminate against order
     switch (order) {
         case 0: {
+            //preOrder
             node->printNode(xtra);
             printTree(node->left, order);
             printTree(node->right, order);
             break;
         }
         case 1: {
+            //inOrder
             printTree(node->left, order);
             node->printNode(xtra);
             printTree(node->right, order);
             break;
         }
         case 2: {
+            //postOrder
             printTree(node->left, order);
             printTree(node->right, order);
             node->printNode(xtra);

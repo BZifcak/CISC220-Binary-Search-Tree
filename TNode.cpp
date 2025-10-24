@@ -12,6 +12,7 @@ TNode::TNode() {
     right = nullptr;       // no right child
     parent = nullptr;      // no parent
     animal = nullptr;      // no Species data allocated
+    height = 1;            //sets default height to 1
 }
 
 // Destructor: attempts to free subtree rooted at this node
@@ -36,7 +37,9 @@ void TNode::printNode(const bool XtraInfo) {
     std::cout << "This species name is: " << animal->name
               << "\nIt's status is: " << animal->status << std::endl;
     if (XtraInfo) {
+        this->updateHeight();
         std::cout << "It's info is: " << animal->info << std::endl;
+        std::cout << "This nodes height is: " << height << std::endl;
     }
 }
 
