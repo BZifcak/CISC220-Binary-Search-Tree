@@ -23,16 +23,17 @@ TNode* BST::find(string n){
     return find(n, first);
 }
 TNode* BST::find(string n, TNode *node) {
-    if (node == NULL) {
-        return NULL;
+    if (node == nullptr) {
+        std::cout<<"animal not found"<<std::endl;
+        return nullptr;
     }
     if (node->animal->name == n) {
         return node;
     }
     if (node->animal->name < n) {
-        return find(n,node->left);
-    } else {
         return find(n,node->right);
+    } else {
+        return find(n,node->left);
     }
 }
 TNode* BST::insert(string n, string i, string s){
@@ -41,22 +42,31 @@ TNode* BST::insert(string n, string i, string s){
     return node;
 }
 void BST::insertNode(TNode *newNode, TNode *node) {
-    if (node->animal->name > newNode->animal->name && node->left == nullptr) {
+    if (first == nullptr) {
+        first = newNode;
+        first->updateHeight();
+        return;
+    }
+    if ((node->animal->name > newNode->animal->name) && node->left == nullptr) {
         node->left = newNode;
         newNode->parent = node;
         first->updateHeight();
         return;
-    }else if  (node->animal->name > newNode->animal->name && node->left == nullptr) {
-        node->left = newNode;
+    }else if  ((node->animal->name < newNode->animal->name) && node->right == nullptr) {
+        node->right = newNode;
         newNode->parent = node;
         first->updateHeight();
         return;
     }
-    if (node->animal->name < newNode->animal->name){insertNode(newNode,node->left);}
-    else{insertNode(newNode,node->right);}
+    if (node->animal->name > newNode->animal->name) {
+        insertNode(newNode,node->left);
+    }
+    else {
+        insertNode(newNode,node->right);
+    }
 }
 TNode* BST::remove(string n) {
-    remove(n,first);
+    return remove(n,first);
 }
 TNode* BST::remove(string n, TNode *node) {
     if (node == nullptr) {
@@ -64,18 +74,18 @@ TNode* BST::remove(string n, TNode *node) {
     }
     if (node->animal->name == n) {
         if (node->animal->name < node->parent->animal->name) {
-            delete [] node;
             node->parent->left = nullptr;
+            node->parent = nullptr;
             first->updateHeight();
             return node;
         } else {
-            delete [] node;
             node->parent->right = nullptr;
+            node->parent = nullptr;
             first->updateHeight();
             return node;
         }
     }
-    if (node->animal->name < n) {
+    if (node->animal->name > n) {
         return remove(n,node->left);
     } else {
         return remove(n,node->right);
@@ -93,19 +103,22 @@ void BST::printTree(TNode* node, int order) {
             node->printNode(xtra);
             printTree(node->left, order);
             printTree(node->right, order);
+            break;
         }
         case 1: {
             printTree(node->left, order);
             node->printNode(xtra);
             printTree(node->right, order);
+            break;
         }
         case 2: {
             printTree(node->left, order);
             printTree(node->right, order);
             node->printNode(xtra);
+            break;
         }
     }
 }
 void BST::updateStatus(string name,string status) {
-    find(name)->updateStatus(status);
+        find(name)->updateStatus(status);
 }
